@@ -3,9 +3,25 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  
+}
+html{
+  font-size: 16px;
+}
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.grid_layout{
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5em;
+  
+}
+.shadow_custom{
+  box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.05);
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -18,10 +34,5 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  
 }
