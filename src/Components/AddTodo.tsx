@@ -1,30 +1,54 @@
-import { useRouter } from "next/router";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import { GrClose } from "react-icons/gr";
-type TaskDetails = {
-  task_description: string;
-  task_date: string;
-  start_time: string;
-  end_time: string;
-};
-
+import { useRouter } from "next/router"; //this is the router from the next.js team
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react"; //this is the react import from the react library
+import { GrClose } from "react-icons/gr"; //this is the icon for the close button
+import { Inter } from "next/font/google"; //this is the font for the button
+const inter = Inter({ subsets: ["latin"] }); //this is the font for the button
+import { TaskDetails } from "@/types/task_types"; //this is the type for the form
+import useTodoContext from "@/hooks/useTodoContext"; //this is the custom hook for the context
+import { singleTodoType } from "@/types/task_types"; //this is the type for the todo object
+import { v4 as uuid } from "uuid"; //this is the alternative to uuidv4
+import useRouting from "@/hooks/useRouting";
+//this is the function for the add todo component
 const AddTodo = () => {
-  const router = useRouter();
+  const {
+    findByIdHandler,
+    addToTaskListHandler,
+    editedTodo: edited_Todo,
+  } = useTodoContext();
+  //this is the router from the next.js team
+  //used to access the router params custom hook from next.js team
+  const router = useRouting();
+
+  const { editId } = router.query;
+  //State to track when the Form is in edit mode
+  //this is the state for the edit mode
+  const [editMode, setEditMode] = useState<boolean>(false);
+  //this is the state for the form
   const [task_details, setTaskDetails] = useState<TaskDetails>({
     task_description: "",
     task_date: "",
     start_time: "",
     end_time: "",
   });
+
+  //Wrapping the findByIdHandler in useEffect to avoid the re-rendering error
   useEffect(() => {
+    //checks the current route and updates the form dynamically
     if (router.pathname === "/edit_task/[editId]") {
+      setEditMode(true); //this is the state for the edit mode
+      const editedTodo = findByIdHandler("editedTodo", editId as string); //this is the function for the edit mode
+      //this is the function for the edit mode
       setTaskDetails({
-        task_description: "Create wire frame",
-        task_date: "2021-10-10",
-        start_time: "10.30am",
-        end_time: "11.30am",
+        ...task_details,
+        task_description: editedTodo.title,
+        task_date: editedTodo.date,
+        start_time: editedTodo.start_time,
+        end_time: editedTodo.end_time,
       });
     } else {
+      //this is the function for the edit mode
+      setEditMode(false);
+
       setTaskDetails({
         task_description: "",
         task_date: "",
@@ -32,24 +56,57 @@ const AddTodo = () => {
         end_time: "",
       });
     }
-  }, []);
+  }, [editId]);
+  //Destructuring Form states parameters
   const { task_description, task_date, start_time, end_time } = task_details;
+  //Function which handles the form submission
+  const addTodoHandler = (event: React.FormEvent) => {
+    event.preventDefault();
+    //Check if all the fields are filled
+    if (task_description && task_date && start_time && end_time) {
+      const todoData: singleTodoType = {
+        title: task_description,
+        date: task_date,
+        start_time,
+        end_time,
+        id: editMode ? (editId as string) : uuid(),
+        completed: false,
+      };
+      addToTaskListHandler(todoData, editMode ? (editId as string) : "");
+    } else {
+      alert("Please fill all the fields");
+    }
+    //Reset the form;
+    setTaskDetails((prevState) => {
+      return {
+        ...prevState,
+        task_description: "",
+        task_date: "",
+        start_time: "",
+        end_time: "",
+      };
+    });
+  };
+  //Function which handles the change event on inputs
   const handleChange =
     (feildName: keyof TaskDetails) =>
     (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      //Update the state
       setTaskDetails({ ...task_details, [feildName]: event.target.value });
     };
   return (
     <div className="rounded-lg bg-white border border-solid border-[#D0D5DD] custom_shadow px-[1.5rem] py-[2.5rem] h-fit">
       <article className=" flex justify-between my-4">
-        <h2 className="text-[#101828] font-semibold text-lg">Add Task</h2>
+        <h2 className="text-[#101828] font-semibold text-lg">
+          {editMode ? "Edit Task" : "Add Task"}
+        </h2>
 
         <button>
           <GrClose />
         </button>
       </article>
 
-      <form action="">
+      <form onSubmit={addTodoHandler}>
         <textarea
           name="task_description"
           cols={30}
@@ -94,11 +151,13 @@ const AddTodo = () => {
           </button>
         </fieldset>
         <fieldset className="flex justify-between font-semibold gap-4 my-8">
-          <button className=" bg-white py-2 px-4 rounded-lg text-[#344054] border border-solid border-[#D0D5DD] custom_shadow  w-full">
+          <button
+            className={`bg-white py-2 px-4 rounded-lg text-[#344054] border border-solid border-[#D0D5DD] custom_shadow  w-full text-base ${inter.className}`}
+          >
             Cancel
           </button>
-          <button className="bg-[#3F5BF6] text-white py-2 px-4 rounded-lg custom_shadow  w-full ">
-            Add
+          <button className="bg-[#3F5BF6] text-white py-2 px-4 rounded-lg custom_shadow  w-full border border-solid border-[#3F5BF6] text-sm ">
+            {editMode ? "Save" : "Add"}{" "}
           </button>
         </fieldset>
       </form>
