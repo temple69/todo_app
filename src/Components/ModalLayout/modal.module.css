@@ -13,3 +13,17 @@
   align-items: center;
   padding: 4px 20px;
 }
+@media (max-width: 640px) {
+
+ .modal {
+  display: flex; /* Hidden by default */
+  left: 0;
+  bottom: 0;
+  align-items: flex-end;
+  padding: 4px 0px;
+  padding-left: 0;
+;
+}
+
+
+}
