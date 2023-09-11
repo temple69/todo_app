@@ -1,4 +1,3 @@
-import { useRouter } from "next/router"; //this is the router from the next.js team
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react"; //this is the react import from the react library
 import { GrClose } from "react-icons/gr"; //this is the icon for the close button
 import { Inter } from "next/font/google"; //this is the font for the button
@@ -14,6 +13,7 @@ const AddTodo = () => {
     findByIdHandler,
     addToTaskListHandler,
     editedTodo: edited_Todo,
+    closeModalHandler,
   } = useTodoContext();
   //this is the router from the next.js team
   //used to access the router params custom hook from next.js team
@@ -21,7 +21,6 @@ const AddTodo = () => {
 
   const { editId } = router.query;
   //State to track when the Form is in edit mode
-  //this is the state for the edit mode
   const [editMode, setEditMode] = useState<boolean>(false);
   //this is the state for the form
   const [task_details, setTaskDetails] = useState<TaskDetails>({
@@ -36,14 +35,21 @@ const AddTodo = () => {
     //checks the current route and updates the form dynamically
     if (router.pathname === "/edit_task/[editId]") {
       setEditMode(true); //this is the state for the edit mode
-      const editedTodo = findByIdHandler("editedTodo", editId as string); //this is the function for the edit mode
+      const editedTodo = findByIdHandler("editedTodo", editId as string);
       //this is the function for the edit mode
       setTaskDetails({
         ...task_details,
-        task_description: editedTodo.title,
-        task_date: editedTodo.date,
-        start_time: editedTodo.start_time,
-        end_time: editedTodo.end_time,
+        task_description:
+          //if the editedTodo is undefined then use the edited_Todo.title else use the editedTodo.title
+          editedTodo === undefined ? edited_Todo.title : editedTodo.title,
+        task_date:
+          editedTodo === undefined ? edited_Todo.date : editedTodo.date,
+        start_time:
+          editedTodo === undefined
+            ? edited_Todo.start_time
+            : editedTodo.start_time,
+        end_time:
+          editedTodo === undefined ? edited_Todo.end_time : editedTodo.end_time,
       });
     } else {
       //this is the function for the edit mode
@@ -95,13 +101,17 @@ const AddTodo = () => {
       setTaskDetails({ ...task_details, [feildName]: event.target.value });
     };
   return (
-    <div className="rounded-lg bg-white border border-solid border-[#D0D5DD] custom_shadow px-[1.5rem] py-[2.5rem] h-fit">
+    <div
+      className={`rounded-lg bg-white border border-solid border-[#D0D5DD] custom_shadow px-[1.5rem]  min-w-fit width_100 ${
+        editId ? "height_vh" : "h-fit"
+      }`}
+    >
       <article className=" flex justify-between my-4">
         <h2 className="text-[#101828] font-semibold text-lg">
           {editMode ? "Edit Task" : "Add Task"}
         </h2>
 
-        <button>
+        <button onClick={() => closeModalHandler()}>
           <GrClose />
         </button>
       </article>
@@ -114,12 +124,12 @@ const AddTodo = () => {
           value={task_description}
           onChange={handleChange("task_description")}
         ></textarea>
-        <fieldset className="text-[#667085] flex justify-between  my-2 bg-white">
+        <fieldset className="text-[#667085] flex justify-between  my-2 bg-white gap-2">
           <input
             type="date"
             name="task_date"
             defaultValue="today"
-            className="border border-[#D0D5DD] rounded-lg  p-1 border-solid shadow_custom"
+            className="border border-[#D0D5DD] rounded-lg  p-1  border-solid shadow_custom"
             value={task_date}
             onChange={handleChange("task_date")}
           />
@@ -140,7 +150,7 @@ const AddTodo = () => {
             onChange={handleChange("end_time")}
           />
         </fieldset>
-        <fieldset className="flex  justify-between items-center my-4">
+        <fieldset className="flex  justify-between items-center my-2">
           <article>
             <span className="text-[#667085] font-medium text-base">
               10 minutes before
