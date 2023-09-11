@@ -7,9 +7,9 @@ const SingleTodoPage = () => {
   const router = useRouter();
   const { findByIdHandler, singleTodo: singleTask } = useTodoContext();
   const { todoId } = router.query;
-  console.log(singleTask);
   //wrapping the findByIdHandler in useEffect to avoid the error
   useEffect(() => {
+    
     findByIdHandler("singleTodo", todoId as string);
   }, [todoId]);
   return (
