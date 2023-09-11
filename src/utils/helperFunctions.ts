@@ -1,5 +1,5 @@
- //Function to convert 24 hour time to 12 hour time
- export function convertTo12HourFormat(time24: string): string {
+//Function to convert 24 hour time to 12 hour time
+export function convertTo12HourFormat(time24: string): string {
   // Split the input time string into hours and minutes
   const [hours, minutes] = time24.split(":").map(Number);
 
@@ -29,15 +29,11 @@ export function getCurrentDate(): string {
   return `${year}-${formattedMonth}-${formattedDay}`;
 }
 //Function to convert ISO date to yyyy-mm-dd
- export function convertISODateToYYYYMMDD(isoDate: string): string {
+export function convertISODateToYYYYMMDD(isoDate: string): string {
   const dateObj = new Date(isoDate);
   const year = dateObj.getUTCFullYear();
-  const month = String(dateObj.getUTCMonth() + 1).padStart(2, '0'); // Months are zero-based
-  const day = String(dateObj.getUTCDate()).padStart(2, '0');
+  const month = String(dateObj.getUTCMonth() + 1).padStart(2, "0"); // Months are zero-based
+  const day = String(dateObj.getUTCDate()).padStart(2, "0");
 
   return `${year}-${month}-${day}`;
 }
-
-
-
-
