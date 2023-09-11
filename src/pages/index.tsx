@@ -8,6 +8,7 @@ const work_sans = Work_Sans({ subsets: ["latin"] });
 //Home page
 const HomePage = () => (
   <main className={`${work_sans.className} py-2 decrease_padding min-w-fit`}>
+    {/* Providing the context */}
     <TodoContexProvider>
       <Home />
     </TodoContexProvider>
