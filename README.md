@@ -2,6 +2,10 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 ## Todo App
+### Features
+* Edit todo
+* View all todos
+* View Single Todo
 
 First, run the development server:
 
