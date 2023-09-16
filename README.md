@@ -7,6 +7,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 * View all todos
 * View Single Todo
 * delete todo
+* fiter todos by date
 
 First, run the development server:
 
