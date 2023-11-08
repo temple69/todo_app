@@ -14,10 +14,9 @@ import Pagination from "./Pagination";
 
 const Home = () => {
   const router = useRouter();
-  const { modalState, openModalHandler, todos,filteredTodosDate} =
+  const { modalState, openModalHandler, todos, filteredTodosDate } =
     useTodoContext();
   const renderTods = filteredTodosDate.length === 0 ? todos : filteredTodosDate;
-
 
   const PageHandler = () => {
     openModalHandler();
@@ -73,9 +72,12 @@ const Home = () => {
       <section className="grid_layout">
         <Todos todos={renderTods} />
         <div className="border_left">{dynamicComponent}</div>
-      
+
         <div>
-          <button className="bg-[#F9FAFB] border border-solid border-[#D0D5DD] rounded-lg shadow_custom  text-[#475467] decrease_padding block showOnMobile w-full ">
+          <button
+            className="bg-[#F9FAFB] border border-solid border-[#D0D5DD] rounded-lg shadow_custom  text-[#475467] decrease_padding block showOnMobile w-full "
+            onClick={PageHandler}
+          >
             <article className="flex justify-between w-full py-2">
               <h4 className="text-base">Input Task</h4>
               <span>
