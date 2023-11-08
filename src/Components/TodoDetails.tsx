@@ -40,6 +40,7 @@ const TodoDetails = ({
           type="checkbox"
           name="completed_todo"
           onClick={() => setIsCompleted(!isCompleted)}
+          checked={isCompleted ? true : false}
         />
         <article
           className="gap-1 cursor-pointer line-through] text-[red]"
@@ -63,9 +64,7 @@ const TodoDetails = ({
         </article>
       </aside>
       <article>
-        <p className="text-sm font-normal text-[#475467]">
-          {date}
-        </p>
+        <p className="text-sm font-normal text-[#475467]">{date}</p>
       </article>
     </div>
   );
